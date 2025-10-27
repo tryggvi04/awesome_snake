@@ -10,8 +10,8 @@ extends Node2D
 
 var apple_grid_pos = Vector2(0, 0)
 
-const GRID_BORDER_Y = 25
-const GRID_BORDER_X = 27
+const GRID_BORDER_Y = 24
+const GRID_BORDER_X = 26
 
 const snake_scene = preload("res://snake.tscn")
 const snake_head_sprite = preload("res://Assets/Images/snake_head.png")
@@ -20,7 +20,8 @@ const snake_body_sprite = preload("res://Assets/Images/snake_body.png")
 var snakes = []
 
 var direction = Vector2(0, -1)
-var speed = 7  # grid a second
+const BASE_SPEED = 10
+var speed = 10  # grid a second
 var GRID_SIZE = 40
 
 var move_timer = 0.0
@@ -45,6 +46,7 @@ func _ready() -> void:
 	snakes[0].grid_pos = Vector2(14, 14)
 	snakes[0].global_position = snakes[0].grid_pos * GRID_SIZE
 	snake_head = snakes[0]
+	snake_head.snake_head = true
 	snake_head.set_sprite(snake_head_sprite)
 	
 	var new_snake = spawn_snake(snake_neck_sprite)
@@ -67,17 +69,17 @@ func _physics_process(delta: float) -> void:
 		move_timer = 0
 	var grid_pos = snake_head.grid_pos
 	grid_pos += direction 
-	if Input.is_action_just_pressed("up") and direction != Vector2(0, 1):
+	if Input.is_action_just_pressed("up") and direction != Vector2(0, 1) and direction != Vector2(0, -1):
 		direction = Vector2(0, -1)
-	elif Input.is_action_just_pressed("down") and direction != Vector2(0, -1):
+	elif Input.is_action_just_pressed("down") and direction != Vector2(0, 1) and direction != Vector2(0, -1):
 		direction = Vector2(0, 1)
-	elif Input.is_action_just_pressed("right") and direction != Vector2(-1, 0):
+	elif Input.is_action_just_pressed("right") and direction != Vector2(-1, 0) and direction != Vector2(1, 0):
 		direction = Vector2(1, 0)
-	elif Input.is_action_just_pressed("left") and direction != Vector2(1, 0):
+	elif Input.is_action_just_pressed("left") and direction != Vector2(-1, 0) and direction != Vector2(1, 0):
 		direction = Vector2(-1, 0)
 	else:
 		moved = false
-	if moved:
+	if moved and can_move:
 		turn_list.append(direction)
 
 
@@ -85,7 +87,7 @@ func spawn_apple():
 	apple_grid_pos = Vector2()
 	var same_place = true
 	while same_place == true:
-		apple_grid_pos = Vector2(randi_range(3, GRID_BORDER_X-1), randi_range(3, GRID_BORDER_Y-1))
+		apple_grid_pos = Vector2(randi_range(4, GRID_BORDER_X-1), randi_range(4, GRID_BORDER_Y-1))
 		same_place = false
 		for snake in snakes:
 			if snake.grid_pos == apple_grid_pos:
@@ -108,7 +110,7 @@ func handle_physics():
 		died()
 	if snake_head.grid_pos.y > GRID_BORDER_Y:
 		died()
-	if snake_head.grid_pos.y <= 2:
+	if snake_head.grid_pos.y <= 3:
 		died()
 	
 	for snake in snakes:

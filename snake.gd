@@ -8,6 +8,8 @@ var turn_list = []
 
 var snake_sprite
 
+var snake_head = false
+
 var grid_pos = Vector2(0, 0)
 var prev_grid_pos = Vector2(0, 0)
 
@@ -40,7 +42,7 @@ func move():
 	lerp_progress = 0.0
 
 	# Handle turns
-	if turn_list.size() > 0 and turn_list[0][1] == grid_pos:
+	if turn_list.size() > 0 and (turn_list[0][1] == grid_pos and !snake_head or snake_head):
 		direction = turn_list[0][0]
 		if direction == Vector2.UP:
 			snake_sprite.rotation = 0
