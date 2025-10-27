@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3 uid="uid://bd1ly3gwoo8e6"]
+
+[ext_resource type="Script" uid="uid://c74qv23cynnms" path="res://snake.gd" id="1_baghe"]
+[ext_resource type="Shader" uid="uid://crqqgtn7no10d" path="res://snake.gdshader" id="2_gxkgb"]
+[ext_resource type="Texture2D" uid="uid://qrxaudp3w67m" path="res://Assets/Images/snake_head.png" id="3_2x2sd"]
+
+[sub_resource type="Gradient" id="Gradient_2x2sd"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0, 0.623529, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_olj5u"]
+gradient = SubResource("Gradient_2x2sd")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2x2sd"]
+shader = ExtResource("2_gxkgb")
+shader_parameter/maxLineWidth = 16.977
+shader_parameter/minLineWidth = 1.629
+shader_parameter/speed = 10.0
+shader_parameter/blockSize = 3.147
+shader_parameter/color = SubResource("GradientTexture1D_olj5u")
+shader_parameter/gradientResolution = 10
+shader_parameter/tolerance = 0.0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_baghe")
+
+[node name="snake" type="Sprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_2x2sd")
+texture = ExtResource("3_2x2sd")
